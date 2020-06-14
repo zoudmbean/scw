@@ -9,4 +9,6 @@ public interface IAdminService {
 	void save(Admin admin);
 
 	List<Admin> getAll();
+
+	Admin getByLoginAccount(Admin loginAdmin);
 }

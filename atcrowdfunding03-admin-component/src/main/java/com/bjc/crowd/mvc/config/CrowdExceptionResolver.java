@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bjc.crowd.constant.CrowdConstant;
+import com.bjc.crowd.exception.LoginException;
 import com.bjc.crowd.util.CrowdUtil;
 import com.bjc.crowd.util.ResultEntity;
 import com.google.gson.Gson;
@@ -17,6 +18,19 @@ import com.google.gson.Gson;
 // @ControllerAdvice表示当前类是一个基于注解的异常处理器类
 @ControllerAdvice
 public class CrowdExceptionResolver {
+	
+	// 登录异常处理
+	@ExceptionHandler(value = LoginException.class)
+	public ModelAndView resolveLoginException(
+				LoginException exception,
+				HttpServletRequest request,
+				HttpServletResponse response
+			) throws IOException {
+
+		String viewName = "admin-login";
+
+		return commonResolve(viewName, exception, request, response);
+	}
 	
 	@ExceptionHandler(value = ArithmeticException.class)
 	public ModelAndView resolveMathException(
