@@ -13,6 +13,8 @@ import com.bjc.crowd.exception.LoginException;
 import com.bjc.crowd.mapper.AdminMapper;
 import com.bjc.crowd.service.IAdminService;
 import com.bjc.crowd.util.CrowdUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 @Service
 public class AdminService implements IAdminService{
@@ -55,6 +57,13 @@ public class AdminService implements IAdminService{
 			throw new LoginException("登录失败，用户名或密码不正确！");
 		}
 		return dbAdmin;
+	}
+
+	@Override
+	public PageInfo<Admin> getPageInfo(String keywords, Integer pageNum, Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
+		List<Admin> admins = adminMapper.selectAdminByKeyword(keywords);
+		return new PageInfo<Admin>(admins);
 	}
 
 }

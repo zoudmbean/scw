@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bjc.crowd.constant.CrowdConstant;
+import com.bjc.crowd.exception.AccessForbiddenException;
 import com.bjc.crowd.exception.LoginException;
 import com.bjc.crowd.util.CrowdUtil;
 import com.bjc.crowd.util.ResultEntity;
@@ -18,6 +19,19 @@ import com.google.gson.Gson;
 // @ControllerAdvice表示当前类是一个基于注解的异常处理器类
 @ControllerAdvice
 public class CrowdExceptionResolver {
+	
+	// 登录失效异常处理
+	@ExceptionHandler(value = AccessForbiddenException.class)
+	public ModelAndView resolveAccessForbiddenException(
+				AccessForbiddenException exception,
+				HttpServletRequest request,
+				HttpServletResponse response
+			) throws IOException {
+
+		String viewName = "admin-login";
+
+		return commonResolve(viewName, exception, request, response);
+	}
 	
 	// 登录异常处理
 	@ExceptionHandler(value = LoginException.class)
@@ -31,29 +45,6 @@ public class CrowdExceptionResolver {
 
 		return commonResolve(viewName, exception, request, response);
 	}
-	
-	@ExceptionHandler(value = ArithmeticException.class)
-	public ModelAndView resolveMathException(
-				ArithmeticException exception,
-				HttpServletRequest request,
-				HttpServletResponse response
-			) throws IOException {
-
-		String viewName = "system-error";
-
-		return commonResolve(viewName, exception, request, response);
-	}
-	@ExceptionHandler(value = NullPointerException.class)
-	public ModelAndView resolveNullPointerException(
-			NullPointerException exception, 
-			HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-		
-		String viewName = "system-error";
-
-		return commonResolve(viewName, exception, request, response);
-	}
-
 	
 	// @ExceptionHandler将一个具体的异常类型和一个方法关联起来
 	private ModelAndView commonResolve(

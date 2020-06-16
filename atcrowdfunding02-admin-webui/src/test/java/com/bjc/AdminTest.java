@@ -1,5 +1,7 @@
 package com.bjc;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.junit.Test;
@@ -26,9 +28,17 @@ public class AdminTest {
 	private IAdminService adminService;
 	
 	@Test
+	public void test4() {
+		List<Admin> selectAdminByKeyword = mapper.selectAdminByKeyword("jerry");
+		System.out.println(selectAdminByKeyword);
+	}
+	
+	@Test
 	public void test3() {
-		Admin admin = new Admin(null, "Mary", "123456", "玛利亚", "jerry@qq.com", null);
-		adminService.save(admin);
+		for(int i = 0 ; i < 500 ; i++) {
+			Admin admin = new Admin(null, "张三" + i, "123456", "玛利亚" + i, "jerry@qq.com", null);
+			adminService.save(admin);
+		}
 	}
 	
 	@Test

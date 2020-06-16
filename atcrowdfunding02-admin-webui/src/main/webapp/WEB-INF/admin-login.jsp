@@ -30,7 +30,7 @@
 
     <div class="container">
 
-      <form class="form-signin" role="form" action="admin/do/login/page.html" method="post">
+      <form class="form-signin" role="form" action="admin/do/login.html" method="post">
         <h2 class="form-signin-heading"><i class="glyphicon glyphicon-log-in"></i> 管理员登录</h2>
           <p style="color:red">${requestScope.exception.message }</p>
 		  <div class="form-group has-success has-feedback">
