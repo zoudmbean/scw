@@ -2,14 +2,20 @@ package com.bjc.crowd.service.impl;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.bjc.crowd.entity.Admin;
 import com.bjc.crowd.entity.AdminExample;
 import com.bjc.crowd.entity.AdminExample.Criteria;
 import com.bjc.crowd.exception.LoginException;
+import com.bjc.crowd.exception.UserAccountInUseException;
 import com.bjc.crowd.mapper.AdminMapper;
 import com.bjc.crowd.service.IAdminService;
 import com.bjc.crowd.util.CrowdUtil;
@@ -24,7 +30,18 @@ public class AdminService implements IAdminService{
 
 	@Override
 	public void save(Admin admin) {
-		adminMapper.insert(admin);
+		try {
+			adminMapper.insert(admin);
+		} catch (Exception e) {
+			ServletRequestAttributes attrs =  (ServletRequestAttributes)RequestContextHolder.currentRequestAttributes();
+			HttpServletRequest request = attrs.getRequest();
+			request.setAttribute("admin", admin);
+			if(e instanceof DuplicateKeyException) {
+				throw new UserAccountInUseException("用户账号已被使用！");
+			}
+			// 其他异常直接抛出
+			throw e;
+		}
 	}
 
 	@Override
@@ -64,6 +81,11 @@ public class AdminService implements IAdminService{
 		PageHelper.startPage(pageNum, pageSize);
 		List<Admin> admins = adminMapper.selectAdminByKeyword(keywords);
 		return new PageInfo<Admin>(admins);
+	}
+
+	@Override
+	public void removeAdmin(Integer id) {
+		adminMapper.deleteByPrimaryKey(id);
 	}
 
 }

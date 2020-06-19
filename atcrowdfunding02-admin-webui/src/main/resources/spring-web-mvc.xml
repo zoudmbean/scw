@@ -26,9 +26,12 @@
 			return "admin-login";
 		}
 	 -->
+	<!-- 跳转到登录页 -->
 	<mvc:view-controller path="/admin/to/login/page.html" view-name="admin-login"/>
 	<!-- 跳转到主页面 -->
 	<mvc:view-controller path="/admin/to/main/page.html" view-name="admin-main"/>
+	<!-- 跳转到添加 -->
+	<mvc:view-controller path="/admin/to/add/page.html" view-name="admin-add"/>
 	
 	<!-- 配置基于XML的异常映射 -->
 	<bean id="simpleMappingExceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
@@ -38,6 +41,7 @@
 				<!-- key属性指定异常全类名 -->
 				<!-- 标签体中写对应的视图（这个值要拼前后缀得到具体路径） -->
 				<prop key="com.bjc.crowd.exception.AccessForbiddenException">admin-login</prop>
+				<prop key="java.security.AccessControlException">admin-login</prop>
 				<prop key="java.lang.Exception">system-error</prop>
 			</props>
 		</property>

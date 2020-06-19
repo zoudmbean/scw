@@ -15,4 +15,6 @@ public interface IAdminService {
 	
 	/** 查询 */
 	PageInfo<Admin> getPageInfo(String keywords,Integer pageNum,Integer pageSize);
+
+	void removeAdmin(Integer id);
 }

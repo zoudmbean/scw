@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.bjc.crowd.constant.CrowdConstant;
 import com.bjc.crowd.exception.AccessForbiddenException;
 import com.bjc.crowd.exception.LoginException;
+import com.bjc.crowd.exception.UserAccountInUseException;
 import com.bjc.crowd.util.CrowdUtil;
 import com.bjc.crowd.util.ResultEntity;
 import com.google.gson.Gson;
@@ -20,16 +21,29 @@ import com.google.gson.Gson;
 @ControllerAdvice
 public class CrowdExceptionResolver {
 	
-	// 登录失效异常处理
-	@ExceptionHandler(value = AccessForbiddenException.class)
-	public ModelAndView resolveAccessForbiddenException(
-				AccessForbiddenException exception,
+	// 添加用户账号重复异常处理
+	@ExceptionHandler(value = UserAccountInUseException.class)
+	public ModelAndView resolveUserAccountInUseException(
+				UserAccountInUseException exception,
 				HttpServletRequest request,
 				HttpServletResponse response
 			) throws IOException {
 
-		String viewName = "admin-login";
+		String viewName = "admin-add";
 
+		return commonResolve(viewName, exception, request, response);
+	}
+	
+	// 登录失效异常处理
+	@ExceptionHandler(value = AccessForbiddenException.class)
+	public ModelAndView resolveAccessForbiddenException(
+			AccessForbiddenException exception,
+			HttpServletRequest request,
+			HttpServletResponse response
+			) throws IOException {
+		
+		String viewName = "admin-login";
+		
 		return commonResolve(viewName, exception, request, response);
 	}
 	
