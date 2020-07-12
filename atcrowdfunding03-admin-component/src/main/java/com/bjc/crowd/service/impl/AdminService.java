@@ -88,4 +88,22 @@ public class AdminService implements IAdminService{
 		adminMapper.deleteByPrimaryKey(id);
 	}
 
+	@Override
+	public Admin findAdminById(Integer id) {
+		return adminMapper.selectByPrimaryKey(id);
+	}
+
+	@Override
+	public void updateAdmin(Admin admin) {
+		try {
+			adminMapper.updateByPrimaryKeySelective(admin);
+		} catch (Exception e) {
+			if(e instanceof DuplicateKeyException) {
+				throw new RuntimeException("用户账号已存在！",e);
+			}
+			// 其他异常直接抛出
+			throw e;
+		}
+	}
+
 }

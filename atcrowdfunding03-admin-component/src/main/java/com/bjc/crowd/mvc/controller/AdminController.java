@@ -21,6 +21,23 @@ public class AdminController {
 	@Autowired
 	private IAdminService adminService;
 	
+	@GetMapping("admin/toEdit/{id}.html")
+	public String toEdit(@PathVariable("id") Integer id, Model model) {
+		Admin admin = adminService.findAdminById(id);
+		model.addAttribute("admin", admin);
+		return "admin-edit";
+	}
+	
+	@PostMapping("/admin/updateAdmin.html")
+	public String updateAdmin(
+			Admin admin,
+			@RequestParam("pageNum") Integer pageNum,
+			@RequestParam("keywords") String keywords
+	) {
+		adminService.updateAdmin(admin);
+		return "redirect:/admin/getByPageInfo.html?pageNum="+pageNum+"&keywords="+keywords;
+	}
+	
 	@PostMapping("/admin/saveAdmin.html")
 	public String saveAdmin(Admin admin) {
 		// 添加默认密码为123456

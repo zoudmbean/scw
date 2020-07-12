@@ -29,16 +29,15 @@
     </nav>
 
     <div class="container">
-
       <form class="form-signin" role="form" action="admin/do/login.html" method="post">
         <h2 class="form-signin-heading"><i class="glyphicon glyphicon-log-in"></i> 管理员登录</h2>
           <p style="color:red">${requestScope.exception.message }</p>
 		  <div class="form-group has-success has-feedback">
-			<input type="text" class="form-control" id="inputSuccess4" placeholder="请输入登录账号" autofocus name="loginAcct">
+			<input type="text" class="form-control" id="inputSuccess4" value="Mary" placeholder="请输入登录账号" autofocus name="loginAcct">
 			<span class="glyphicon glyphicon-user form-control-feedback"></span>
 		  </div>
 		  <div class="form-group has-success has-feedback">
-			<input type="text" class="form-control" id="inputSuccess4" placeholder="请输入登录密码" style="margin-top:10px;" name="userPswd">
+			<input type="text" class="form-control" id="inputSuccess4" value="123456" placeholder="请输入登录密码" style="margin-top:10px;" name="userPswd">
 			<span class="glyphicon glyphicon-lock form-control-feedback"></span>
 		  </div>
         <button class="btn btn-lg btn-success btn-block" type="submit"> 登录</button>

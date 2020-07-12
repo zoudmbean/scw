@@ -101,12 +101,12 @@
 												<td>${info.userName }</td>
 												<td>${info.email }</td>
 												<td>
-													<button type="button" class="btn btn-success btn-xs">
+													<a class="btn btn-success btn-xs" href="assign/toAssign/${info.id}.html?adminId=${info.id}&pageNum=${requestScope.pageInfo.pageNum}&keywords=${param.keywords}" />
 														<i class=" glyphicon glyphicon-check"></i>
-													</button>
-													<button type="button" class="btn btn-primary btn-xs">
-														<i class=" glyphicon glyphicon-pencil"></i>
-													</button>
+													</a>
+													<a class="btn btn-primary btn-xs" href="admin/toEdit/${info.id}.html?pageNum=${requestScope.pageInfo.pageNum}&keywords=${param.keywords}" />
+														<i class=" glyphicon glyphicon-edit"></i>
+													</a>
 													<a class="btn btn-danger btn-xs" href="admin/removeAdmin/${info.id}/${pageInfo.pageNum}/${param.keywords}.html"><i class=" glyphicon glyphicon-remove"></i></a>
 												</td>
 											</tr>

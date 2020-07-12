@@ -11,9 +11,9 @@
 				<ul style="margin-top: 10px; display: none;">
 					<li style="height: 30px;"><a href="admin/getByPageInfo.html"><i
 							class="glyphicon glyphicon-user"></i> 用户维护</a></li>
-					<li style="height: 30px;"><a href="role.html"><i
+					<li style="height: 30px;"><a href="admin/to/role/page.html"><i
 							class="glyphicon glyphicon-king"></i> 角色维护</a></li>
-					<li style="height: 30px;"><a href="permission.html"><i
+					<li style="height: 30px;"><a href="admin/to/menu/page.html"><i
 							class="glyphicon glyphicon-lock"></i> 菜单维护</a></li>
 				</ul></li>
 			<li class="list-group-item tree-closed"><span><i

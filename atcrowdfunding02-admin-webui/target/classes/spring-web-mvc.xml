@@ -32,6 +32,10 @@
 	<mvc:view-controller path="/admin/to/main/page.html" view-name="admin-main"/>
 	<!-- 跳转到添加 -->
 	<mvc:view-controller path="/admin/to/add/page.html" view-name="admin-add"/>
+	<!-- 跳转到角色維護頁面 -->
+	<mvc:view-controller path="/admin/to/role/page.html" view-name="role-page"/>
+	<!-- 跳转到菜单頁面 -->
+	<mvc:view-controller path="/admin/to/menu/page.html" view-name="menu-page"/>
 	
 	<!-- 配置基于XML的异常映射 -->
 	<bean id="simpleMappingExceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
