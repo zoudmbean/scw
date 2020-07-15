@@ -45,7 +45,7 @@ function fillTableBody(pageInfo){
 		var checkboxTd = "<td><input id='"+roleId+"' class='itemBox' type='checkbox'></td>";
 		var roleNameTd = "<td>"+roleName+"</td>";
 		
-		var checkBtn = "<button type='button' class='btn btn-success btn-xs'><i class=' glyphicon glyphicon-check'></i></button>";
+		var checkBtn = "<button id='"+roleId+"' type='button' class='authBtn btn btn-success btn-xs'><i class=' glyphicon glyphicon-check'></i></button>";
 		
 		// 通过button标签的id属性（别的属性其实也可以）把roleId值传递到button按钮的单击响应函数中，在单击响应函数中使用this.id
 		var pencilBtn = "<button id='"+roleId+"' type='button' class='btn btn-primary btn-xs pencilBtn'><i class=' glyphicon glyphicon-pencil'></i></button>";
@@ -64,6 +64,8 @@ function fillTableBody(pageInfo){
 	}
 }
 
+
+// 清空表单元素
 function clearForm(formId){
 	$(':input','#'+formId)
 
@@ -178,4 +180,85 @@ function showRemoveModal(arr,flag){
 	}
 	$("#modalBody").html(html);
 	$("#removemodal").modal("show");
+}
+
+
+// 显示模态框
+function showAuthModal(roleId){
+	window.roleId = roleId;
+	// alert(roleId);
+	$.ajax({
+		'url':'assign/auth/getAll.json',
+		'dataType':'json',
+		'type':'get',
+		'success':function(res){
+			// 调用成功，才加载树
+			if(res.result === 'SUCCESS'){
+				var setting = {
+					data: {
+						simpleData: {
+							enable: true,			// 开启简单数据
+							idKey: "id",			// 指定id
+							pIdKey: "categoryId"	// 指定父节点id
+						},
+						key: {
+							name: 'title'			//	指定显示字段
+						}
+					},
+					check: {
+						autoCheckTrigger: false,	// 是否开启联动选择
+						enable: true,				// 开启选择
+						chkStyle: "checkbox"		// 选择类型
+					}
+				};
+
+				var zNodes = res.data;
+				
+				// 初始化tree
+				$.fn.zTree.init($("#authTree"), setting, zNodes);
+				
+				// 展开tree
+				var treeObj = $.fn.zTree.getZTreeObj("authTree")
+				treeObj.expandAll(true);
+				
+				// 显示角色所属的权限
+				var ajaxRtn = $.ajax({ 
+					"url":"assign/getAuths/"+ roleId + ".json", 
+					"type":"get", 
+					"data":{ "roleId":roleId },
+					"dataType":"json",
+					"async":false }
+				);
+				if(ajaxRtn.status != 200) { 
+					layer.msg(" 请 求 处 理 出 错 ！ 响 应 状 态 码 是 ： "+ajaxRtn.status+" 说 明 是 ： "+ajaxRtn.statusText); 
+					return ; 
+				}
+				var authIdArray = ajaxRtn.responseJSON.data;
+				if(authIdArray){
+					// 6.根据 authIdArray 把树形结构中对应的节点勾选上
+					// ①遍历 authIdArray 
+					$.each(authIdArray,function(index,id){
+						var treeNode = treeObj.getNodeByParam("id", id);
+						// 参数：
+						// 1. treeNode为当前节点
+						// 2. 设置为 true 表示节点勾选
+						// 3. 设置为 false，表示不“联动”，不联动是为了避免把不该勾选的勾 选上
+						treeObj.checkNode(treeNode,true,false);
+					});
+				}
+			}
+			
+			if(res.result === 'FAILD'){
+				layer.msg(res.message);
+			}
+		},
+		'error':function(res){
+			if(res.result){
+				layer.msg(res.message);
+				return;
+			}
+			layer.msg("查询失败！");
+		}
+	});
+	$("#authModal").modal("show");
 }

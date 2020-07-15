@@ -7,16 +7,44 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bjc.crowd.entity.Auth;
 import com.bjc.crowd.entity.Role;
+import com.bjc.crowd.service.IAuthService;
 import com.bjc.crowd.service.IRoleService;
+import com.bjc.crowd.util.ResultEntity;
 
 @Controller
 public class AssignController {
 	
 	@Autowired
 	private IRoleService roleService;
+	
+	@Autowired
+	private IAuthService authService;
+	
+	@ResponseBody
+	@PostMapping("/assign/auth/setAuth/{roleId}.json")
+	public ResultEntity<String> setAuthByRoleId(@PathVariable("roleId") Integer roleId,@RequestBody List<Integer> authIds){
+		authService.setAuthByRoleId(roleId,authIds);
+		return ResultEntity.successWithoutData();
+	}
+	
+	@ResponseBody
+	@GetMapping("/assign/getAuths/{roleId}.json")
+	public ResultEntity<List<Integer>> getAllAuthByRoleId(@PathVariable("roleId") Integer roleId){
+		List<Integer> authIds = authService.getAllAuthByRoleId(roleId);
+		return ResultEntity.successWithData(authIds);
+	}
+	
+	@GetMapping("/assign/auth/getAll.json")
+	@ResponseBody
+	public ResultEntity<List<Auth>> getAllAuth(){
+		return ResultEntity.successWithData(authService.getAllAuth());
+	}
 	
 	@GetMapping("/assign/toAssign/{id}.html")
 	public String toAssignRolePage(@PathVariable("id") Integer id,Model model) {

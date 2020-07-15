@@ -8,6 +8,9 @@
 <!-- 引入pagination分页插件环境 -->
 <link rel="stylesheet" href="css/pagination.css">
 <script type="text/javascript" src="jquery/jquery.pagination.js"></script>
+<!-- 引入ztree -->
+<link rel="stylesheet" href="ztree/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="ztree/jquery.ztree.all-3.5.min.js"></script>
 <script type="text/javascript" src="layer-v3.1.1/layer/layer.js"></script>
 <script type="text/javascript" src="crowdJs/role.js"></script>
 
@@ -74,6 +77,12 @@
 			$("#roleForm input[name='name']").val(roleName);
 			$("#roleModal").modal("show");
 		});
+		
+		// 设置权限
+		$("#rolePageBody").on("click",".authBtn",function(){
+			var roleId = this.id;
+			showAuthModal(roleId);
+		})
 		
 		// 删除绑定事件
 		$("#rolePageBody").on("click",".removeBtn",function(){
@@ -152,6 +161,43 @@
 			});
 			// 显示模态框
 			showRemoveModal(roleArray,true);
+		});
+		
+		// 分配权限
+		$("#roleBathBtn").click(function(){
+			// alert(window.roleId);
+			var treeObj = $.fn.zTree.getZTreeObj("authTree");
+			var nodes = treeObj.getCheckedNodes(true);
+			var idArray = [];
+			$.each( nodes, function(index,node){
+			  	idArray.push(node.id);
+			});
+			console.log(JSON.stringify(idArray));
+			// 调用后台保存
+			$.ajax({
+				'type':'post',
+				'url':'assign/auth/setAuth/'+window.roleId+'.json',
+				'contentType':'application/json;charset=utf-8',
+				'data':JSON.stringify(idArray),
+				'dataType':'json',
+				'success':function(res){
+					if(res.result === "SUCCESS"){
+						layer.msg("执行成功！");
+						// 关闭模态框
+						$("#authModal").modal("hide");
+					}
+					if(res.result === "FAILD"){
+						layer.msg(res.message);
+					}
+				},
+				'error':function(res){
+					if(res.message){
+						layer.msg(res.message);
+						return ;
+					}
+					layer.msg("授权失败！");
+				}
+			});
 		});
 		
 	});
@@ -243,5 +289,6 @@
 	<!-- 引入模态框 -->
 	<%@ include file="/WEB-INF/role-modal.jsp"%>
 	<%@ include file="/WEB-INF/role-remove-modal.jsp"%>
+	<%@ include file="/WEB-INF/role-auth-modal.jsp"%>
 </body>
 </html>
